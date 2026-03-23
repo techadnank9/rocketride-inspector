@@ -1,0 +1,49 @@
+pipeline "Simple Chat Reply" {
+  description: "Generate a concise assistant reply, score the response, then publish if approved."
+}
+
+node "generate-reply" {
+  type: "llm.chat"
+  model: "gpt-4.1-mini"
+
+  input: {
+    system: "Reply in a friendly tone using one concise sentence."
+    user: ""
+  }
+
+  output_schema: {
+    reply: "string"
+    model: "string"
+  }
+}
+
+node "score-response" {
+  type: "validator.json"
+  depends_on: ["generate-reply"]
+
+  input: {
+    rubric: "Return JSON with score:number and approved:boolean"
+    reply: "@generate-reply.reply"
+  }
+
+  output_schema: {
+    score: "number"
+    approved: "boolean"
+  }
+}
+
+node "publish-message" {
+  type: "chat.publish"
+  depends_on: ["score-response"]
+  when: "@score-response.approved == true"
+
+  input: {
+    channel: "chat-panel"
+    message: "@generate-reply.reply"
+  }
+
+  output_schema: {
+    delivered: "boolean"
+    messageId: "string"
+  }
+}

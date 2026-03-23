@@ -1,0 +1,61 @@
+{
+  "name": "rocketride-inspector",
+  "displayName": "RocketRide Inspector",
+  "description": "Chrome DevTools for RocketRide pipelines",
+  "version": "0.0.1",
+  "private": true,
+  "publisher": "adnan",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other",
+    "Debuggers"
+  ],
+  "activationEvents": [
+    "onCommand:rocketrideInspector.openDemo",
+    "onCommand:rocketrideInspector.replayDemo"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "rocketrideInspector.openDemo",
+        "title": "RocketRide Inspector: Open Demo"
+      },
+      {
+        "command": "rocketrideInspector.replayDemo",
+        "title": "RocketRide Inspector: Replay Demo"
+      }
+    ]
+  },
+  "scripts": {
+    "clean": "rm -rf dist webview/dist",
+    "build:extension": "esbuild src/extension.ts --bundle --platform=node --target=node18 --format=cjs --external:vscode --outfile=dist/extension.js",
+    "build:webview": "vite build --config webview/vite.config.ts",
+    "build": "npm run clean && npm run build:webview && npm run build:extension",
+    "dev:webview": "vite --config webview/vite.config.ts",
+    "watch:extension": "esbuild src/extension.ts --bundle --platform=node --target=node18 --format=cjs --external:vscode --outfile=dist/extension.js --watch"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.511.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^3.3.0",
+    "zustand": "^5.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.3",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/vscode": "^1.95.0",
+    "@vitejs/plugin-react": "^4.4.1",
+    "autoprefixer": "^10.4.20",
+    "esbuild": "^0.25.5",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3",
+    "vite": "^5.4.19"
+  }
+}
