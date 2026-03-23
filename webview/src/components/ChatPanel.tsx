@@ -37,7 +37,7 @@ export function ChatPanel({ messages, isRunning, onSend }: ChatPanelProps) {
         </p>
       </CardHeader>
       <CardContent className="flex h-full min-h-[520px] flex-col gap-4 pb-5">
-        <div className="flex-1 rounded-2xl border border-white/10 bg-ink/55 p-4">
+        <div className="min-h-0 flex-1 rounded-2xl border border-white/10 bg-ink/55 p-4">
           {messages.length === 0 ? (
             <div className="flex h-full items-center justify-center text-center text-sm text-slate-400">
               No messages yet. Ask anything in the chat box below to run `Simple Chat Reply.pipe`.
@@ -72,7 +72,7 @@ export function ChatPanel({ messages, isRunning, onSend }: ChatPanelProps) {
           )}
         </div>
 
-        <form className="flex gap-3" onSubmit={handleSubmit}>
+        <form className="sticky bottom-0 flex gap-3 rounded-2xl border border-white/10 bg-[rgba(7,17,31,0.92)] p-3 backdrop-blur" onSubmit={handleSubmit}>
           <textarea
             value={draft}
             onChange={(event) => setDraft(event.target.value)}

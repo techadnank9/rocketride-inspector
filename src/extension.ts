@@ -1,5 +1,6 @@
 import * as fs from "node:fs";
 import * as vscode from "vscode";
+import { config as loadDotenv } from "dotenv";
 import { createLiveChatFailureRun, createLiveChatPipelineRun } from "./logger";
 import { ChatMessage, ExtensionToWebviewMessage, PipelineInspectorData, PipelineRunSnapshot, WebviewToExtensionMessage } from "./types";
 
@@ -10,6 +11,8 @@ const GEMINI_MODEL = "gemini-2.5-flash";
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 export function activate(context: vscode.ExtensionContext) {
+  loadLocalEnv(context);
+
   context.subscriptions.push(
     vscode.commands.registerCommand("rocketrideInspector.openDemo", () => {
       inspectorPanel = createOrShowInspector(context);
@@ -108,6 +111,22 @@ function createInspectorData(
       content,
     },
   };
+}
+
+function loadLocalEnv(context: vscode.ExtensionContext) {
+  if (process.env.GEMINI_API_KEY) {
+    return;
+  }
+
+  const envFile = vscode.Uri.joinPath(context.extensionUri, ".env");
+  if (!fs.existsSync(envFile.fsPath)) {
+    return;
+  }
+
+  loadDotenv({
+    path: envFile.fsPath,
+    override: false,
+  });
 }
 
 async function runGeminiChatPipeline(

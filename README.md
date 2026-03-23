@@ -71,6 +71,23 @@ npm run build
 RocketRide Inspector: Open Demo
 ```
 
+### Gemini Setup
+
+You can provide the Gemini key in either of these ways:
+
+1. Export it before launching VS Code:
+
+```bash
+export GEMINI_API_KEY=your_key_here
+code .
+```
+
+2. Or place it in the local ignored [`.env`](/Users/adnan/Documents/rocketride-inspector/.env) file:
+
+```env
+GEMINI_API_KEY=your_key_here
+```
+
 ## Demo Steps
 
 1. Launch the demo command to open the inspector panel.

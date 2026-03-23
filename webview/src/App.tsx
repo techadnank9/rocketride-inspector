@@ -116,7 +116,9 @@ export default function App() {
           ) : null}
         </header>
 
-        <div className="grid flex-1 gap-4 2xl:grid-cols-[minmax(320px,0.9fr)_minmax(0,1.15fr)_minmax(320px,0.8fr)] 2xl:gap-6">
+        <div className="grid flex-1 gap-4 2xl:grid-cols-[minmax(300px,0.82fr)_minmax(320px,0.92fr)_minmax(0,1.18fr)] 2xl:gap-6">
+          <SourcePanel source={source} snapshot={snapshot} isRunning={isRunning} />
+
           <ChatPanel messages={messages} isRunning={isRunning} onSend={handleSendMessage} />
 
           {snapshot ? (
@@ -132,8 +134,6 @@ export default function App() {
               </CardContent>
             </Card>
           )}
-
-          <SourcePanel source={source} />
         </div>
       </div>
     </main>

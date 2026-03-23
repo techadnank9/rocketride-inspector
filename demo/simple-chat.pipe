@@ -1,49 +1,73 @@
-pipeline "Simple Chat Reply" {
-  description: "Generate a concise assistant reply, score the response, then publish if approved."
-}
-
-node "generate-reply" {
-  type: "llm.chat"
-  model: "gpt-4.1-mini"
-
-  input: {
-    system: "Reply in a friendly tone using one concise sentence."
-    user: ""
-  }
-
-  output_schema: {
-    reply: "string"
-    model: "string"
-  }
-}
-
-node "score-response" {
-  type: "validator.json"
-  depends_on: ["generate-reply"]
-
-  input: {
-    rubric: "Return JSON with score:number and approved:boolean"
-    reply: "@generate-reply.reply"
-  }
-
-  output_schema: {
-    score: "number"
-    approved: "boolean"
-  }
-}
-
-node "publish-message" {
-  type: "chat.publish"
-  depends_on: ["score-response"]
-  when: "@score-response.approved == true"
-
-  input: {
-    channel: "chat-panel"
-    message: "@generate-reply.reply"
-  }
-
-  output_schema: {
-    delivered: "boolean"
-    messageId: "string"
-  }
+{
+  "viewport": {
+    "x": 363.0773104141522,
+    "y": 117.07434869433263,
+    "zoom": 1.258230588923437
+  },
+  "name": "Simple Chat",
+  "description": "RocketRide demo pipeline for a chat source connected to Gemini.",
+  "components": [
+    {
+      "id": "chat_1",
+      "provider": "chat",
+      "config": {
+        "hideForm": true,
+        "mode": "Source",
+        "parameters": {},
+        "type": "chat"
+      },
+      "ui": {
+        "position": {
+          "x": -220,
+          "y": 120
+        },
+        "measured": {
+          "width": 160,
+          "height": 65
+        },
+        "data": {
+          "provider": "chat",
+          "class": "source",
+          "type": "default"
+        },
+        "formDataValid": true
+      }
+    },
+    {
+      "id": "llm_gemini_1",
+      "provider": "llm_gemini",
+      "config": {
+        "profile": "gemini-2_5-flash",
+        "parameters": {
+          "google": {}
+        },
+        "gemini-2_5-flash": {
+          "apikey": ""
+        }
+      },
+      "ui": {
+        "position": {
+          "x": 0,
+          "y": 120
+        },
+        "measured": {
+          "width": 160,
+          "height": 65
+        },
+        "data": {
+          "provider": "llm_gemini",
+          "class": "llm",
+          "type": "default"
+        },
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "questions",
+          "from": "chat_1"
+        }
+      ]
+    }
+  ],
+  "project_id": "475e46de-9382-47cd-a52c-7f9c470a54a9"
 }
